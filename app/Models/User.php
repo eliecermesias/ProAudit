@@ -8,11 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable,HasRoles, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +48,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_superadmin' => 'boolean',
         ];
     }
 
@@ -60,5 +62,38 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    public function activeLicense()
+    {
+        // Si el usuario tiene licencia propia
+        if ($this->licenses()->where('is_active', true)->exists()) {
+            return $this->licenses()->where('is_active', true)->first();
+        }
+
+        // Si pertenece a una empresa con licencia activa
+        if ($this->companies()->exists()) {
+            foreach ($this->companies as $company) {
+                $license = $company->licenses()->where('is_active', true)->first();
+                if ($license) {
+                    return $license;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function hasModuleAccess(string $module): bool
+    {
+        $license = $this->activeLicense();
+
+        if (!$license) {
+            return false;
+        }
+
+        $modules = $license->modules_enabled ?? [];
+
+        return in_array($module, $modules);
     }
 }

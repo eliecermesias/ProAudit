@@ -1,0 +1,35 @@
+name: Laravel CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, intl, sqlite
+
+      - name: Instalar dependencias Composer
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Instalar dependencias NPM
+        run: npm install && npm run build
+
+      - name: Configurar base de datos SQLite
+        run: |
+          touch database/database.sqlite
+          php artisan migrate --force
+
+      - name: Ejecutar pruebas
+        run: php artisan test

@@ -11,6 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias([
+            'auth' => \App\Http\Middleware\Authenticate::class,
+            'check.license' => \App\Http\Middleware\CheckLicense::class, // 👈 aquí
+        ]);
+    })
+
+    ->withMiddleware(function (Middleware $middleware): void {
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
