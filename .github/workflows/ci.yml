@@ -1,14 +1,22 @@
-name: Laravel CI
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: proaudit_test
+          MYSQL_USER: laravel
+          MYSQL_PASSWORD: secret
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
       - name: Checkout código
@@ -18,7 +26,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, bcmath, intl, sqlite
+          extensions: mbstring, bcmath, intl, pdo_mysql
 
       - name: Instalar dependencias Composer
         run: composer install --no-progress --prefer-dist --optimize-autoloader
@@ -26,9 +34,10 @@ jobs:
       - name: Instalar dependencias NPM
         run: npm install && npm run build
 
-      - name: Configurar base de datos SQLite
+      - name: Configurar entorno Laravel
         run: |
-          touch database/database.sqlite
+          cp .env.testing .env
+          php artisan key:generate
           php artisan migrate --force
 
       - name: Ejecutar pruebas
