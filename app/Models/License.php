@@ -19,6 +19,7 @@ class License extends Model
         'max_users',
         'modules_enabled',
         'is_active',
+        'license_key',
     ];
 
     protected $casts = [

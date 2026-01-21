@@ -63,4 +63,37 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    public function activeLicense()
+    {
+        // Si el usuario tiene licencia propia
+        if ($this->licenses()->where('is_active', true)->exists()) {
+            return $this->licenses()->where('is_active', true)->first();
+        }
+
+        // Si pertenece a una empresa con licencia activa
+        if ($this->companies()->exists()) {
+            foreach ($this->companies as $company) {
+                $license = $company->licenses()->where('is_active', true)->first();
+                if ($license) {
+                    return $license;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function hasModuleAccess(string $module): bool
+    {
+        $license = $this->activeLicense();
+
+        if (!$license) {
+            return false;
+        }
+
+        $modules = $license->modules_enabled ?? [];
+
+        return in_array($module, $modules);
+    }
 }

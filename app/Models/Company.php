@@ -11,19 +11,24 @@ class Company extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'nit',
         'email',
         'phone',
         'address',
         'logo',
         'description',
-        'contact_name',
-        'nit',
+        'cotact_name',
+    ];
+
+    protected $casts = [
+        'logo' => 'string',
+        'description' => 'string',
     ];
 
     // Relaciones
     public function users()
     {
-        return $this->belongsToMany(User::class)
+        return $this->belongsToMany(User::class, 'company_user')
             ->withPivot('role')
             ->withTimestamps();
     }
