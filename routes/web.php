@@ -19,7 +19,6 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::resource('companies', CompanyController::class);
 
 
 
