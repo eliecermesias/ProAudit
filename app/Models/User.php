@@ -31,6 +31,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    
     protected $hidden = [
         'password',
         'two_factor_secret',
@@ -95,5 +96,13 @@ class User extends Authenticatable
         $modules = $license->modules_enabled ?? [];
 
         return in_array($module, $modules);
+    }
+    public function licenses()
+    {
+        return $this->hasMany(License::class);
+    }
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'company_user');
     }
 }

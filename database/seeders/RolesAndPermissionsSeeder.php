@@ -29,18 +29,21 @@ class RolesAndPermissionsSeeder extends Seeder
             ]);
         }
 
-        // Roles con guard web
-        $admin    = Role::firstOrCreate(['name' => 'Administrador', 'guard_name' => 'web']);
-        $auditor  = Role::firstOrCreate(['name' => 'Auditor', 'guard_name' => 'web']);
-        $asesor   = Role::firstOrCreate(['name' => 'Asesor', 'guard_name' => 'web']);
-        $invitado = Role::firstOrCreate(['name' => 'Invitado', 'guard_name' => 'web']);
-        $dev      = Role::firstOrCreate(['name' => 'Desarrollador', 'guard_name' => 'web']);
+        // RolesAndPermissionsSeeder.php
+        $superadmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
+        $developer  = Role::firstOrCreate(['name' => 'developer', 'guard_name' => 'web']);
+        $admin      = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $auditor    = Role::firstOrCreate(['name' => 'auditor', 'guard_name' => 'web']);
+        $advisor    = Role::firstOrCreate(['name' => 'advisor', 'guard_name' => 'web']);
+        $guest      = Role::firstOrCreate(['name' => 'guest', 'guard_name' => 'web']);
 
-        // Asignación de permisos a roles
+        // Asignación de permisos
+        $superadmin->givePermissionTo(Permission::all());
+        $developer->givePermissionTo(Permission::all());
         $admin->givePermissionTo(['administrar sistema', 'gestionar licencias']);
         $auditor->givePermissionTo(['realizar auditorias']);
-        $asesor->givePermissionTo(['revisar informes']);
-        $invitado->givePermissionTo(['consultar informacion']);
-        $dev->givePermissionTo(Permission::all()); // acceso total
+        $advisor->givePermissionTo(['revisar informes']);
+        $guest->givePermissionTo(['consultar informacion']);
+
     }
 }
