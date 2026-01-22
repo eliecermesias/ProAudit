@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('icon');
             $table->string('url')->default('#');
             $table->string('slug')->default('#');
-            $table->string('current')->default('#');;
+            $table->string('current')->default('#');
             $table->integer('priority')->nullable();
+            $table->json('roles')->nullable(); // 👈 roles permitidos
             $table->timestamps();
         });
+
     }
 
     /**

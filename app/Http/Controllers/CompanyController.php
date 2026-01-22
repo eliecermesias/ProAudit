@@ -13,9 +13,7 @@ class CompanyController extends Controller
     public function index()
     {
         //dd(auth()->user()->getRoleNames());
-        return "ingreso SA";
-
-
+        return "companies";
     }
 
     /**

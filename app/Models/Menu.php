@@ -20,6 +20,7 @@ class Menu extends Model
 
     protected $casts = [
         'current' => 'boolean',
+        'roles' => 'array',
     ];
 
     public function menu()
