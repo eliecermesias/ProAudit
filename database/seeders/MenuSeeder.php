@@ -28,7 +28,7 @@ class MenuSeeder extends Seeder
                 'name'     => $menu['name'],
                 'icon'     => $menu['icon'],
                 'url'      => $menu['url'],
-                'roles' => json_encode($menu['roles']), // 👈 guardamos roles
+                'roles'    => $menu['roles'], 
             ]);
         }
 
@@ -77,7 +77,7 @@ class MenuSeeder extends Seeder
                     'icon'     => $item['icon'],
                     'url'      => $item['url'],
                     'menu_id'  => $parentId,
-                    'roles' => json_encode($item['roles']), // 👈 guard
+                    'roles'    => $item['roles'], // 👈 guard
                 ]);
             }
         }

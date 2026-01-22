@@ -16,13 +16,13 @@
                     @foreach ($menu as $item)
                         @if ($item['children']->isEmpty())
                             <flux:navlist.item :icon="$item['icon']"  :href="$item['url']" :active="request()->is(ltrim($item['current'], '/'))">
-                                {{ $item['name'] }}
+                                {{ __($item['name']) }}
                             </flux:navlist.item>
                         @else
-                            <flux:navlist.group expandable :expanded="false" :heading="$item['name']" class=" lg:grid">
+                            <flux:navlist.group expandable :expanded="false" :heading=" __($item['name']) " class=" lg:grid">
                                     @foreach ($item['children'] as $child)
                                         <flux:navlist.item :icon="$child['icon']" :href="$child['url']" :active="request()->is(ltrim($child['current'], '/'))">
-                                            {{$child['name']}}
+                                            {{ __($child['name']) }}
                                         </flux:navlist.item>
                                     @endforeach
                             </flux:navlist.group>
