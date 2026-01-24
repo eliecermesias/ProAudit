@@ -12,7 +12,7 @@ class LicenseController extends Controller
      */
     public function index()
     {
-        return "licencias";
+        return 'licencias';
     }
 
     /**

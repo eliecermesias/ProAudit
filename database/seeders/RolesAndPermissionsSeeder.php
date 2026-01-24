@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
@@ -31,11 +31,11 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // RolesAndPermissionsSeeder.php
         $superadmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
-        $developer  = Role::firstOrCreate(['name' => 'developer', 'guard_name' => 'web']);
-        $admin      = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        $auditor    = Role::firstOrCreate(['name' => 'auditor', 'guard_name' => 'web']);
-        $advisor    = Role::firstOrCreate(['name' => 'advisor', 'guard_name' => 'web']);
-        $guest      = Role::firstOrCreate(['name' => 'guest', 'guard_name' => 'web']);
+        $developer = Role::firstOrCreate(['name' => 'developer', 'guard_name' => 'web']);
+        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $auditor = Role::firstOrCreate(['name' => 'auditor', 'guard_name' => 'web']);
+        $advisor = Role::firstOrCreate(['name' => 'advisor', 'guard_name' => 'web']);
+        $guest = Role::firstOrCreate(['name' => 'guest', 'guard_name' => 'web']);
 
         // Asignación de permisos
         $superadmin->givePermissionTo(Permission::all());

@@ -9,6 +9,7 @@ class Company extends Model
 {
     /** @use HasFactory<\Database\Factories\CompanyFactory> */
     use HasFactory;
+
     protected $fillable = [
         'name',
         'nit',
@@ -37,6 +38,4 @@ class Company extends Model
     {
         return $this->belongsTo(License::class);
     }
-
-
 }

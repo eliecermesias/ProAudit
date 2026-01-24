@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('license_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); 
+            $table->string('name')->unique();
             // Ejemplo: "Licencia Empresa", "Licencia Usuario"
 
-            $table->string('scope'); 
+            $table->string('scope');
             // Valores esperados: "company" o "user"
 
             $table->text('description')->nullable();

@@ -9,6 +9,7 @@ class LicenseType extends Model
 {
     /** @use HasFactory<\Database\Factories\LicenseTypeFactory> */
     use HasFactory;
+
     protected $fillable = [
         'name',
         'scope',
@@ -19,5 +20,4 @@ class LicenseType extends Model
     {
         return $this->hasMany(License::class);
     }
-
 }

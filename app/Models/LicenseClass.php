@@ -9,6 +9,7 @@ class LicenseClass extends Model
 {
     /** @use HasFactory<\Database\Factories\LicenseClassFactory> */
     use HasFactory;
+
     protected $fillable = [
         'name',
         'description',
@@ -25,5 +26,4 @@ class LicenseClass extends Model
     {
         return $this->hasMany(License::class);
     }
-
 }

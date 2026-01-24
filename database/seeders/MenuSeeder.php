@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Menu;
+use Illuminate\Database\Seeder;
 
 class MenuSeeder extends Seeder
 {
@@ -11,11 +11,11 @@ class MenuSeeder extends Seeder
     {
         // Menús principales
         $mainMenus = [
-            ['name' => 'Dashboard',  'icon' => 'home', 'url' => '/dashboard', 'roles' => ['superadmin','auditor','developer']],
+            ['name' => 'Dashboard',  'icon' => 'home', 'url' => '/dashboard', 'roles' => ['superadmin', 'auditor', 'developer']],
             ['name' => 'Audits',     'icon' => 'clipboard-document-check', 'url' => '/auditor/Audits', 'roles' => ['auditor']],
             ['name' => 'Advisory',   'icon' => 'user-group', 'url' => '#', 'roles' => ['advisor']],
             ['name' => 'Consulting', 'icon' => 'briefcase', 'url' => '#', 'roles' => ['consultant']],
-            ['name' => 'Reports',    'icon' => 'chart-bar', 'url' => '#', 'roles' => ['auditor','superadmin']],
+            ['name' => 'Reports',    'icon' => 'chart-bar', 'url' => '#', 'roles' => ['auditor', 'superadmin']],
             ['name' => 'Settings',   'icon' => 'cog-6-tooth', 'url' => '#', 'roles' => ['superadmin']],
             ['name' => 'Companies',  'icon' => 'building-office', 'url' => '/superadmin/companies', 'roles' => ['superadmin']],
             ['name' => 'Licenses',   'icon' => 'key', 'url' => '/superadmin/licenses', 'roles' => ['superadmin']],
@@ -25,10 +25,10 @@ class MenuSeeder extends Seeder
 
         foreach ($mainMenus as $menu) {
             $menuMap[$menu['name']] = Menu::create([
-                'name'     => $menu['name'],
-                'icon'     => $menu['icon'],
-                'url'      => $menu['url'],
-                'roles'    => $menu['roles'], 
+                'name' => $menu['name'],
+                'icon' => $menu['icon'],
+                'url' => $menu['url'],
+                'roles' => $menu['roles'],
             ]);
         }
 
@@ -55,9 +55,9 @@ class MenuSeeder extends Seeder
                 ['name' => 'Praise',      'icon' => 'hand-thumb-up', 'url' => '/consulting/Praise', 'roles' => ['consultant']],
             ],
             'Reports' => [
-                ['name' => 'Audit',       'icon' => 'magnifying-glass', 'url' => '/reports/Audit', 'roles' => ['auditor','superadmin']],
-                ['name' => 'Operational', 'icon' => 'presentation-chart-line', 'url' => '/reports/Operational', 'roles' => ['auditor','superadmin']],
-                ['name' => 'Technical',   'icon' => 'cpu-chip', 'url' => '/reports/Technical', 'roles' => ['auditor','superadmin']],
+                ['name' => 'Audit',       'icon' => 'magnifying-glass', 'url' => '/reports/Audit', 'roles' => ['auditor', 'superadmin']],
+                ['name' => 'Operational', 'icon' => 'presentation-chart-line', 'url' => '/reports/Operational', 'roles' => ['auditor', 'superadmin']],
+                ['name' => 'Technical',   'icon' => 'cpu-chip', 'url' => '/reports/Technical', 'roles' => ['auditor', 'superadmin']],
             ],
             'Settings' => [
                 ['name' => 'Standards',          'icon' => 'scale', 'url' => '/settings/Standards', 'roles' => ['superadmin']],
@@ -73,11 +73,11 @@ class MenuSeeder extends Seeder
             $parentId = $menuMap[$parentName]->id;
             foreach ($items as $item) {
                 Menu::create([
-                    'name'     => $item['name'],
-                    'icon'     => $item['icon'],
-                    'url'      => $item['url'],
-                    'menu_id'  => $parentId,
-                    'roles'    => $item['roles'], // 👈 guard
+                    'name' => $item['name'],
+                    'icon' => $item['icon'],
+                    'url' => $item['url'],
+                    'menu_id' => $parentId,
+                    'roles' => $item['roles'], // 👈 guard
                 ]);
             }
         }

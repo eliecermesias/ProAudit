@@ -6,11 +6,11 @@ namespace Database\Seeders;
 use App\Models\User;
 */
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Arr;
 
 class UsersSeeder extends Seeder
 {
@@ -19,7 +19,7 @@ class UsersSeeder extends Seeder
      */
     public function run(): void
     {
-         // Crear roles si no existen
+        // Crear roles si no existen
         $roles = ['superadmin', 'developer', 'admin', 'auditor', 'advisor', 'guest'];
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);
@@ -68,9 +68,7 @@ class UsersSeeder extends Seeder
         ]);
         $guest->assignRole('guest');
 
-    
         // 20 usuarios falsos con roles aleatorios
-
 
         for ($i = 0; $i < 20; $i++) {
             $role = Arr::random($roles); // selecciona un rol aleatorio

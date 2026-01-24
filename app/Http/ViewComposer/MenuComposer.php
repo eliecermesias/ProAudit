@@ -3,10 +3,8 @@
 namespace App\Http\ViewComposer;
 
 use App\Models\Menu;
-use Illuminate\Contracts\View\View;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
 
 class MenuComposer
 {
@@ -16,9 +14,10 @@ class MenuComposer
         // $view->with('menu', $menu);
         /** @var User|null $user */
         $user = Auth::user();
-            // Si no hay usuario, no mostramos nada
-        if (!$user) {
+        // Si no hay usuario, no mostramos nada
+        if (! $user) {
             $view->with('menu', collect());
+
             return;
         }
 
@@ -41,6 +40,7 @@ class MenuComposer
                     $item->children = $item->children->filter(function ($child) use ($roles) {
                         return empty($child->roles) || array_intersect($child->roles, $roles);
                     });
+
                     return $item;
                 });
         }

@@ -9,13 +9,14 @@ class Menu extends Model
 {
     /** @use HasFactory<\Database\Factories\MenuFactory> */
     use HasFactory;
+
     protected $fillable = [
         'menu_id',
         'name',
         'icon',
         'url',
         'current',
-        'priority'
+        'priority',
     ];
 
     protected $casts = [
@@ -27,13 +28,14 @@ class Menu extends Model
     {
         return $value ? json_decode($value, true) : [];
     }
+
     public function menu()
     {
         return $this->belongsTo(Menu::class, 'menu_id');
     }
+
     public function children()
     {
         return $this->hasMany(Menu::class, 'menu_id');
     }
-
 }

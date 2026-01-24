@@ -9,6 +9,7 @@ class License extends Model
 {
     /** @use HasFactory<\Database\Factories\LicenseFactory> */
     use HasFactory;
+
     protected $fillable = [
         'company_id',
         'user_id',
@@ -49,5 +50,4 @@ class License extends Model
     {
         return $this->belongsTo(LicenseClass::class, 'license_class_id');
     }
-
 }

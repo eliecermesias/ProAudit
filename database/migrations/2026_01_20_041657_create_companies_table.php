@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('companies', function (Blueprint $table) {
-        $table->id();
-        $table->string('name')->unique();
-        $table->string('nit')->unique();
-        $table->string('email')->nullable();
-        $table->string('phone')->nullable();
-        $table->string('address')->nullable();
-        $table->text('logo')->nullable();
-        $table->text('description')->nullable();
-        $table->string('cotact_name')->nullable();
-        $table->timestamps();
-    });
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('nit')->unique();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->text('logo')->nullable();
+            $table->text('description')->nullable();
+            $table->string('cotact_name')->nullable();
+            $table->timestamps();
+        });
 
     }
 

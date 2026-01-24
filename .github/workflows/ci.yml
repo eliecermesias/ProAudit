@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: write
+
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
@@ -13,6 +16,8 @@ jobs:
     steps:
       - name: Checkout código
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configurar PHP
         uses: shivammathur/setup-php@v2
@@ -32,8 +37,16 @@ jobs:
       - name: Ejecutar migraciones en SQLite
         run: php artisan migrate --force
 
-      - name: Validar estilo de código (Pint)
-        run: vendor/bin/pint --test
+      - name: Corregir estilo de código con Pint
+        run: vendor/bin/pint
+
+      - name: Commit de correcciones de Pint
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore: aplicar correcciones de estilo con Pint" || echo "No hay cambios que commitear"
+          git push
 
       - name: Ejecutar pruebas con cobertura
         run: vendor/bin/phpunit --coverage-clover=coverage.xml

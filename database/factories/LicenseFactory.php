@@ -3,9 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Company;
-use App\Models\User;
-use App\Models\LicenseType;
 use App\Models\LicenseClass;
+use App\Models\LicenseType;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
