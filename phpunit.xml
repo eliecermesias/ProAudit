@@ -61,6 +61,7 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="APP_KEY" value="base64:Nm5umPJT1VyU9mW4CYvFBrxvucEj/FG7ryySyJdz//Y="/>
+        <env name="VITE_DISABLED" value="true"/>
 
         <!-- Configuración para Feature Tests (MySQL) -->
         <!-- <env name="FEATURE_DB_CONNECTION" value="mysql"/>
