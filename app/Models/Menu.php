@@ -23,6 +23,10 @@ class Menu extends Model
         'roles' => 'array',
     ];
 
+    public function getRolesAttribute($value)
+    {
+        return $value ? json_decode($value, true) : [];
+    }
     public function menu()
     {
         return $this->belongsTo(Menu::class, 'menu_id');
@@ -31,4 +35,5 @@ class Menu extends Model
     {
         return $this->hasMany(Menu::class, 'menu_id');
     }
+
 }

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('slug')->default('#');
             $table->string('current')->default('#');
             $table->integer('priority')->nullable();
-            $table->json('roles')->nullable(); // 👈 roles permitidos
+            $table->json('roles')->nullable()->default('[]'); // 👈 roles permitidos
             $table->timestamps();
         });
 
