@@ -1,0 +1,46 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, intl, sqlite
+
+      - name: Instalar dependencias
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Copiar archivo .env
+        run: cp .env.example .env
+
+      - name: Generar key de aplicación
+        run: php artisan key:generate
+
+      - name: Ejecutar migraciones en SQLite
+        run: php artisan migrate --force
+
+      - name: Validar estilo de código (Pint)
+        run: vendor/bin/pint --test
+
+      - name: Ejecutar pruebas con cobertura
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+
+      - name: Subir cobertura a Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          fail_ci_if_error: true
