@@ -1,0 +1,8 @@
+.git/
+node_modules/
+tests/
+.env
+*.log
+coverage.xml
+vendor/bin/
+storage/debugbar/

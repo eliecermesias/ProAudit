@@ -1,0 +1,29 @@
+name: Deploy Test FTP
+
+on:
+  workflow_dispatch: # Se ejecuta manualmente desde la pestaña Actions
+
+jobs:
+  deploy-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Crear archivo de prueba
+        run: echo "Deploy automático funcionando 🚀" > ftp-test.txt
+
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Subir archivo de prueba vía FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
+          protocol: ftps
+          local-dir: ./ # Carpeta local
+          server-dir: /home/mendezspeak/public_html/proaudit # Carpeta destino en hosting
+          exclude: |
+            *
+            !ftp-test.txt

@@ -1,0 +1,24 @@
+name: Deploy a hosting compartido
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Deploy vía FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
+          protocol: ftps
+          local-dir: ./ # Carpeta local a subir
+          server-dir: /temporal # Carpeta destino en hosting
