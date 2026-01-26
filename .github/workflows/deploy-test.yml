@@ -23,7 +23,7 @@ jobs:
           port: ${{ secrets.FTP_PORT }}
           protocol: ftps
           local-dir: ./ # Carpeta local
-          server-dir: /proaudit.custom-enfield.com/
+          server-dir: //
           exclude: |
             *
             !ftp-test.txt
