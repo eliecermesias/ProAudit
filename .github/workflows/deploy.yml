@@ -21,4 +21,4 @@ jobs:
           port: ${{ secrets.FTP_PORT }}
           protocol: ftps
           local-dir: ./ # Carpeta local a subir
-          server-dir: /temporal # Carpeta destino en hosting
+          server-dir: proaudit.custom-enfield.com/ # Carpeta destino en hosting
