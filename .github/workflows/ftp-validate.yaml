@@ -13,7 +13,7 @@ jobs:
           echo "Servidor: ${{ secrets.FTP_SERVER }}"
           echo "Usuario: ${{ secrets.FTP_USERNAME }}"
           echo "Puerto: ${{ secrets.FTP_PORT }}"
-          # ⚠️ Nunca mostramos la contraseña en logs por seguridad
+          # Nunca mostramos la contraseña en logs por seguridad
 
       - name: Crear archivo de prueba
         run: echo "Validación de conexión FTP 🚀" > ftp-validate.txt
