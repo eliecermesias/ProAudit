@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -8,9 +7,6 @@ use Spatie\Permission\Models\Role;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         // Permisos base
@@ -25,25 +21,25 @@ class RolesAndPermissionsSeeder extends Seeder
         foreach ($permissions as $permission) {
             Permission::firstOrCreate([
                 'name' => $permission,
-                'guard_name' => 'web', // 👈 importante
+                'guard_name' => 'web',
             ]);
         }
 
-        // RolesAndPermissionsSeeder.php
-        $superadmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
-        $developer = Role::firstOrCreate(['name' => 'developer', 'guard_name' => 'web']);
-        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        $auditor = Role::firstOrCreate(['name' => 'auditor', 'guard_name' => 'web']);
-        $advisor = Role::firstOrCreate(['name' => 'advisor', 'guard_name' => 'web']);
-        $guest = Role::firstOrCreate(['name' => 'guest', 'guard_name' => 'web']);
+        // Roles base
+        $roles = [
+            'superadmin' => Permission::all()->pluck('name')->toArray(),
+            'developer'  => Permission::all()->pluck('name')->toArray(),
+            'admin'      => ['administrar sistema', 'gestionar licencias'],
+            'auditor'    => ['realizar auditorias'],
+            'advisor'    => ['revisar informes'],
+            'guest'      => ['consultar informacion'],
+        ];
 
-        // Asignación de permisos
-        $superadmin->givePermissionTo(Permission::all());
-        $developer->givePermissionTo(Permission::all());
-        $admin->givePermissionTo(['administrar sistema', 'gestionar licencias']);
-        $auditor->givePermissionTo(['realizar auditorias']);
-        $advisor->givePermissionTo(['revisar informes']);
-        $guest->givePermissionTo(['consultar informacion']);
+        foreach ($roles as $roleName => $rolePermissions) {
+            $role = Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
 
+            // 👇 sincroniza permisos, evita duplicados y asegura consistencia
+            $role->syncPermissions($rolePermissions);
+        }
     }
 }

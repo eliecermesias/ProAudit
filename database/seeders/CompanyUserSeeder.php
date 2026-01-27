@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\Company;
@@ -8,9 +7,6 @@ use Illuminate\Database\Seeder;
 
 class CompanyUserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $companies = Company::all();
@@ -21,11 +17,13 @@ class CompanyUserSeeder extends Seeder
             $assignedUsers = $users->random(rand(3, 5));
 
             foreach ($assignedUsers as $user) {
-                $company->users()->attach($user->id, [
-                    'role' => fake()->randomElement(['Gerente', 'Auditor', 'Asesor']),
+                // 👇 evita duplicados
+                $company->users()->syncWithoutDetaching([
+                    $user->id => [
+                        'role' => fake()->randomElement(['Gerente', 'Auditor', 'Asesor']),
+                    ]
                 ]);
             }
         }
-
     }
 }

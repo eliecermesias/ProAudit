@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Factories;
 
 use App\Models\Company;
@@ -8,16 +7,8 @@ use App\Models\LicenseType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\License>
- */
 class LicenseFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
@@ -28,13 +19,14 @@ class LicenseFactory extends Factory
             'starts_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
             'expires_at' => $this->faker->dateTimeBetween('now', '+1 year'),
             'max_users' => $this->faker->randomElement([10, 25, 50]),
-            'modules_enabled' => $this->faker->randomElements(
-                ['auditorias', 'reportes', 'normas'],
-                $this->faker->numberBetween(1, 3)
+            'modules_enabled' => json_encode(
+                $this->faker->randomElements(
+                    ['auditorias', 'reportes', 'normas'],
+                    $this->faker->numberBetween(1, 3)
+                )
             ),
             'is_active' => $this->faker->boolean(80),
             'license_key' => hash('sha256', uniqid().time().rand()),
         ];
-
     }
 }

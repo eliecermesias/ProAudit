@@ -9,17 +9,18 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class LicenseTypeFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $type = $this->faker->randomElement([
+            ['name' => 'Licencia Empresa', 'scope' => 'company'],
+            ['name' => 'Licencia Usuario', 'scope' => 'user'],
+        ]);
+
         return [
-            'name' => $this->faker->unique()->randomElement(['Licencia Empresa', 'Licencia Usuario']),
-            'scope' => $this->faker->randomElement(['company', 'user']),
+            'name' => $type['name'],
+            'scope' => $type['scope'],
             'description' => $this->faker->sentence(),
         ];
     }
+
 }

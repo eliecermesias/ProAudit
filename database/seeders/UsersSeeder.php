@@ -1,10 +1,5 @@
 <?php
-
 namespace Database\Seeders;
-
-/*use Illuminate\Database\Seeder;
-use App\Models\User;
-*/
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -14,9 +9,6 @@ use Spatie\Permission\Models\Role;
 
 class UsersSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         // Crear roles si no existen
@@ -26,55 +18,50 @@ class UsersSeeder extends Seeder
         }
 
         // Usuario Superadmin
-        $superadmin = User::factory()->create([
-            'name' => 'Eliecer Mesias',
-            'email' => 'eliecer.mesias@gmail.com',
-            'password' => Hash::make('12345678'),
-        ]);
+        $superadmin = User::updateOrCreate(
+            ['email' => 'eliecer.mesias@gmail.com'],
+            ['name' => 'Eliecer Mesias', 'password' => Hash::make('12345678')]
+        );
         $superadmin->assignRole('superadmin');
 
-        $developer = User::factory()->create([
-            'name' => 'Dev Demo',
-            'email' => 'dev@proaudit.com',
-            'password' => Hash::make('password'),
-        ]);
+        // Otros usuarios fijos
+        $developer = User::updateOrCreate(
+            ['email' => 'dev@proaudit.com'],
+            ['name' => 'Dev Demo', 'password' => Hash::make('password')]
+        );
         $developer->assignRole('developer');
 
-        $admin = User::factory()->create([
-            'name' => 'Admin Demo',
-            'email' => 'admin@proaudit.com',
-            'password' => Hash::make('password'),
-        ]);
+        $admin = User::updateOrCreate(
+            ['email' => 'admin@proaudit.com'],
+            ['name' => 'Admin Demo', 'password' => Hash::make('password')]
+        );
         $admin->assignRole('admin');
 
-        $auditor = User::factory()->create([
-            'name' => 'Auditor Demo',
-            'email' => 'auditor@proaudit.com',
-            'password' => Hash::make('password'),
-        ]);
+        $auditor = User::updateOrCreate(
+            ['email' => 'auditor@proaudit.com'],
+            ['name' => 'Auditor Demo', 'password' => Hash::make('password')]
+        );
         $auditor->assignRole('auditor');
 
-        $advisor = User::factory()->create([
-            'name' => 'Advisor Demo',
-            'email' => 'advisor@proaudit.com',
-            'password' => Hash::make('password'),
-        ]);
+        $advisor = User::updateOrCreate(
+            ['email' => 'advisor@proaudit.com'],
+            ['name' => 'Advisor Demo', 'password' => Hash::make('password')]
+        );
         $advisor->assignRole('advisor');
 
-        $guest = User::factory()->create([
-            'name' => 'Guest Demo',
-            'email' => 'guest@proaudit.com',
-            'password' => Hash::make('password'),
-        ]);
+        $guest = User::updateOrCreate(
+            ['email' => 'guest@proaudit.com'],
+            ['name' => 'Guest Demo', 'password' => Hash::make('password')]
+        );
         $guest->assignRole('guest');
 
-        // 20 usuarios falsos con roles aleatorios
-
-        for ($i = 0; $i < 20; $i++) {
-            $role = Arr::random($roles); // selecciona un rol aleatorio
-            $user = User::factory()->create();
-            $user->assignRole($role);
+        // 20 usuarios falsos con roles aleatorios (solo en local/testing)
+        if (app()->environment('local')) {
+            for ($i = 0; $i < 20; $i++) {
+                $role = Arr::random($roles);
+                $user = User::factory()->create();
+                $user->assignRole($role);
+            }
         }
-
     }
 }
