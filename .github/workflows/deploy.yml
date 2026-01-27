@@ -1,42 +1,17 @@
-name: Deploy Laravel + Vite
+name: Deploy a hosting compartido
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout del código
-      - name: Checkout
+      - name: Checkout código
         uses: actions/checkout@v3
 
-      # 2. Instalar dependencias PHP
-      - name: Instalar dependencias PHP
-        run: composer install --no-dev --optimize-autoloader
-
-      # 3. Instalar dependencias Node
-      - name: Instalar dependencias Node
-        run: npm install
-
-      # 4. Compilar assets con Vite
-      - name: Compilar assets con Vite
-        run: npm run build
-
-      # 5. Validar existencia de manifest.json
-      - name: Validar manifest.json
-        run: |
-          if [ ! -f public/build/manifest.json ]; then
-            echo "❌ ERROR: No se encontró public/build/manifest.json"
-            exit 1
-          else
-            echo "✅ Se encontró public/build/manifest.json"
-          fi
-
-      # 6. Deploy vía FTP
       - name: Deploy vía FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.3
         with:
@@ -44,11 +19,15 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
-          protocol: ftp
-          local-dir: ./
-          server-dir: ./ # raíz del FTP
-          exclude: |
-            .git*
-            node_modules/
-            tests/
-          log-level: verbose
+          protocol: ftps
+          local-dir: ./ # Carpeta local a subir
+          server-dir: ./ # Carpeta destino en hosting
+
+      - name: Validar existencia de manifest.json
+        run: |
+            if [ ! -f public/build/manifest.json ]; then
+              echo "❌ ERROR: No se encontró public/build/manifest.json"
+              exit 1
+            else
+              echo "✅ Se encontró public/build/manifest.json"
+            fi
