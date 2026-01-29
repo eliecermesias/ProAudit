@@ -1,0 +1,75 @@
+name: Deploy a hosting compartido
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Instalar dependencias
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      # - name: Configurar entorno
+      #   run: |
+      #     cp .env.example .env
+      #     php artisan key:generate
+      #   env:
+      #     DB_CONNECTION: mysql
+      #     DB_HOST: ${{ secrets.DB_HOST }}
+      #     DB_PORT: ${{ secrets.DB_PORT }}
+      #     DB_DATABASE: ${{ secrets.DB_DATABASE }}
+      #     DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      #     DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          
+      - name: Configurar entorno manualmente
+        run: |
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          php artisan config:clear
+          php artisan config:cache
+      
+      - name: Migraciones
+        run: php artisan migrate --force
+
+      - name: Ejecutar seeders
+        run: php artisan db:seed --force
+
+      - name: Listar tablas en la BD
+        run: |
+          echo "📋 Tablas existentes en la base de datos:"
+          mysql -h ${{ secrets.DB_HOST }} \
+                -P ${{ secrets.DB_PORT }} \
+                -u ${{ secrets.DB_USERNAME }} \
+                -p${{ secrets.DB_PASSWORD }} \
+                -e "SHOW TABLES;" ${{ secrets.DB_DATABASE }}
+
+
+      # - name: Deploy vía FTP
+      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+      #   with:
+      #     server: ${{ secrets.FTP_SERVER }}
+      #     username: ${{ secrets.FTP_USERNAME }}
+      #     password: ${{ secrets.FTP_PASSWORD }}
+      #     port: ${{ secrets.FTP_PORT }}
+      #     protocol: ftps
+      #     local-dir: ./
+      #     server-dir: ./
+
+      - name: Validar existencia de manifest.json
+        run: |
+          if [ ! -f public/build/manifest.json ]; then
+            echo "❌ ERROR: No se encontró public/build/manifest.json"
+            exit 1
+          else
+            echo "✅ Se encontró public/build/manifest.json"
+          fi
