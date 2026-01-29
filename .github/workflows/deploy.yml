@@ -9,9 +9,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout del código
       - name: Checkout código
         uses: actions/checkout@v3
 
+      # 2. Instalar dependencias PHP
+      - name: Instalar dependencias
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      # 3. Configurar entorno con secretos de la BD remota
+      - name: Configurar entorno
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      # 4. Ejecutar migraciones en la BD remota
+      - name: Migraciones
+        run: php artisan migrate --force
+
+      # 5. Deploy vía FTP al hosting compartido
       - name: Deploy vía FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.3
         with:
@@ -20,14 +43,15 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.FTP_PORT }}
           protocol: ftps
-          local-dir: ./ # Carpeta local a subir
-          server-dir: ./ # Carpeta destino en hosting
+          local-dir: ./
+          server-dir: ./
 
+      # 6. Validar que exista manifest.json
       - name: Validar existencia de manifest.json
         run: |
-            if [ ! -f public/build/manifest.json ]; then
-              echo "❌ ERROR: No se encontró public/build/manifest.json"
-              exit 1
-            else
-              echo "✅ Se encontró public/build/manifest.json"
-            fi
+          if [ ! -f public/build/manifest.json ]; then
+            echo "❌ ERROR: No se encontró public/build/manifest.json"
+            exit 1
+          else
+            echo "✅ Se encontró public/build/manifest.json"
+          fi
