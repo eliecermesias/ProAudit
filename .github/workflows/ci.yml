@@ -1,0 +1,63 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, bcmath, intl, sqlite
+
+      - name: Instalar dependencias PHP
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Instalar dependencias de Node
+        run: npm ci
+
+      - name: Compilar assets con Vite
+        run: npm run build
+
+      - name: Copiar archivo .env
+        run: cp .env.example .env
+
+      - name: Generar key de aplicación
+        run: php artisan key:generate
+
+      - name: Ejecutar migraciones en SQLite
+        run: php artisan migrate --force
+
+      - name: Corregir estilo de código con Pint
+        run: vendor/bin/pint
+
+      - name: Commit de correcciones de Pint
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore: aplicar correcciones de estilo con Pint" || echo "No hay cambios que commitear"
+          git push
+
+      - name: Ejecutar pruebas con cobertura
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+
+      - name: Subir cobertura a Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          fail_ci_if_error: true
