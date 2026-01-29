@@ -34,8 +34,8 @@ class Company extends Model
             ->withTimestamps();
     }
 
-    public function license()
+    public function licenses()
     {
-        return $this->belongsTo(License::class);
+        return $this->hasMany(License::class);
     }
 }

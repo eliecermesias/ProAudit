@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\License;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,11 @@ class LicenseController extends Controller
      */
     public function index()
     {
-        return 'licencias';
+        // return 'licencias'
+        $companies = Company::with('licenses')->select('companies.*')->paginate(10);
+        //$licenses = License::all();
+        //return $companies;
+        return view('superadmin.Licences.index', compact('companies'));
     }
 
     /**
@@ -21,6 +26,7 @@ class LicenseController extends Controller
     public function create()
     {
         //
+        return "create";
     }
 
     /**

@@ -19,8 +19,23 @@
             <a href="#beneficios" class="hover:text-blue-500">Beneficios</a>
             <a href="#normas" class="hover:text-blue-500">Normas ISO</a>
             <a href="#contacto" class="hover:text-blue-500">Contacto</a>
+            {{-- 
             <a href="/login" class="px-4 py-2 bg-blue-900 text-white rounded hover:bg-blue-700">Login</a>
-            <a href="/register" class="px-4 py-2 bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded hover:from-blue-300 hover:to-blue-500 font-semibold">Registro</a>
+            <a href="/register" class="px-4 py-2 bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded hover:from-blue-300 hover:to-blue-500 font-semibold">Registro</a> 
+            --}}
+            @if (Route::has('login'))
+                <nav class="flex items-center justify-end gap-4">
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="hover:text-blue-500">Auditpro - APP</a>
+                    @else
+                        <a href="/login" class="px-4 py-2 bg-blue-900 text-white rounded hover:bg-blue-700">Login</a>
+
+                        {{-- @if (Route::has('register'))
+                            <a href="{{ route('register') }}">Register</a>
+                        @endif --}}
+                    @endauth
+                </nav>
+                @endif
             </nav>
         </div>
     </header>
